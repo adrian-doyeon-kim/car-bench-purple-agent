@@ -30,18 +30,9 @@ the instructions specify. The prompt contains no vehicle terminology, no
 policy text, and no task identifiers; swapping in a different CAR-bench-style
 benchmark would require changing nothing in the agent.
 
-Running `gpt-5-mini` with `reasoning_effort=medium` and `temperature=1.0`,
-the agent reaches **Pass¹ 86.7 %** on a 30-task subset of the public test
-split and **Pass³ 83.3 %** (10 / 12) on a 12-task Pass³ mini split, with
-Pass@3 = 100 %. The Pass@3 result means every remaining Pass³ miss came from
-run-to-run variance rather than a task the model failed to understand.
-
-## Overview
-
-Single-pass A2A agent with a domain-agnostic, policy-agnostic system prompt.
-All rules the agent follows come from the instructions the green agent sends;
-the agent itself has no hardcoded task knowledge, tool names, or policy
-content.
+The agent runs on `gpt-5-mini` with `reasoning_effort=medium` and
+`temperature=1.0`. Evaluated results are published on the
+[CAR-bench leaderboard](https://github.com/RDI-Foundation/car-bench-agentbeats-leaderboard).
 
 ## Architecture
 
@@ -53,15 +44,6 @@ Green Agent (Evaluator)  ◄──A2A──►  Purple Agent
   - Scores results                   - No hardcoded policies or tools
 ```
 
-The agent is intentionally minimal:
-
-- **No multi-stage pipeline**. Multi-agent / planner-executor pipelines hurt
-  sequential, state-dependent tool-calling tasks (arXiv 2601.12307, 2604.02460).
-- **No policy content in the prompt**. The six `CRITICAL RULES` describe *how*
-  to follow instructions, never *what* those instructions contain.
-- **No tool-name or domain-specific strings**. The prompt says "AI assistant"
-  and "INSTRUCTIONS:", not "in-car voice assistant" or "vehicle policies".
-
 ## Quick Start
 
 ```bash
@@ -71,9 +53,19 @@ export OPENAI_API_KEY="sk-..."
 # Run locally (default port 9009 matches the agentbeats.dev runner)
 uv run src/server.py --host 0.0.0.0 --port 9009
 
-# Or with Docker (linux/amd64 required for agentbeats.dev)
+# Or pull the pre-built public image (linux/amd64)
+docker run -p 9009:9009 -e OPENAI_API_KEY=$OPENAI_API_KEY \
+  ghcr.io/adrian-doyeon-kim/car-bench-purple-agent:latest
+
+# Or build the image locally
 docker build --platform linux/amd64 -t car-bench-purple-agent .
 docker run -p 9009:9009 -e OPENAI_API_KEY=$OPENAI_API_KEY car-bench-purple-agent
+```
+
+Verify the A2A agent card is reachable:
+
+```bash
+curl http://127.0.0.1:9009/.well-known/agent-card.json
 ```
 
 ## Configuration
@@ -94,6 +86,9 @@ path activates `reasoning_effort`; with Anthropic models it can also activate
 `interleaved-thinking`.
 
 ## Layout
+
+Entry point: `src/server.py` (A2A server exposing `/.well-known/agent-card.json`).
+Executor: `CARBenchAgentExecutor` in `src/car_bench_agent.py`.
 
 ```
 src/
@@ -130,26 +125,6 @@ uv run python eval/run_pass3_eval.py --smoke-test --start-purple
 # 4. Run mini eval (12 tasks × 3 trials = 36 sessions, Pass^3)
 uv run python eval/run_pass3_eval.py --mini-test
 ```
-
-## Design Principles
-
-The agent follows six rules, all domain-agnostic and policy-agnostic:
-
-1. **Capability check** — verify a matching tool exists before acting; treat
-   "similar" tools as non-substitutes; treat missing/unknown response fields
-   as unavailable data.
-2. **Policy compliance** — identify applicable rules from the instructions;
-   verify prerequisites via information-gathering tools first.
-3. **Resolve ambiguity** — follow whatever resolution procedure the
-   instructions define; asking the user is a last resort, not a first choice.
-4. **Gather then act** — information-gathering tools before state-changing
-   tools; parallel calls when independent.
-5. **Minimize state changes** — don't call a state-changing tool if the
-   current state already matches.
-6. **Output format** — follow any format rules in the instructions.
-
-Plus an agent-persistence directive (keep going until the user's request is
-fully resolved) drawn from the OpenAI GPT-5 prompting guide.
 
 ## License
 
