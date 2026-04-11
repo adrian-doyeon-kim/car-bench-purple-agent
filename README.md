@@ -44,47 +44,6 @@ Green Agent (Evaluator)  ◄──A2A──►  Purple Agent
   - Scores results                   - No hardcoded policies or tools
 ```
 
-## Quick Start
-
-```bash
-# Set your API key
-export OPENAI_API_KEY="sk-..."
-
-# Run locally (default port 9009 matches the agentbeats.dev runner)
-uv run src/server.py --host 0.0.0.0 --port 9009
-
-# Or pull the pre-built public image (linux/amd64)
-docker run -p 9009:9009 -e OPENAI_API_KEY=$OPENAI_API_KEY \
-  ghcr.io/adrian-doyeon-kim/car-bench-purple-agent:latest
-
-# Or build the image locally
-docker build --platform linux/amd64 -t car-bench-purple-agent .
-docker run -p 9009:9009 -e OPENAI_API_KEY=$OPENAI_API_KEY car-bench-purple-agent
-```
-
-Verify the A2A agent card is reachable:
-
-```bash
-curl http://127.0.0.1:9009/.well-known/agent-card.json
-```
-
-## Configuration
-
-| Env Variable | Default | Description |
-|---|---|---|
-| `OPENAI_API_KEY` / `ANTHROPIC_API_KEY` / ... | — | API key for the chosen model provider (required) |
-| `AGENT_LLM` | `openai/gpt-5-mini` | LiteLLM-compatible model identifier |
-| `AGENT_THINKING` | `true` | Enable reasoning / extended thinking |
-| `AGENT_REASONING_EFFORT` | `medium` | `low / medium / high` (reasoning models) or integer budget |
-| `AGENT_TEMPERATURE` | `1.0` | Sampling temperature |
-| `AGENT_INTERLEAVED_THINKING` | `true` | Interleaved thinking (Anthropic models) |
-| `AGENT_TIMEOUT` | `120` | Per-LLM-call timeout in seconds |
-| `AGENT_TRACE_DIR` | *(unset)* | If set, write deep per-turn trace markdown |
-
-Any LiteLLM-compatible model works. With a reasoning model the `AGENT_THINKING`
-path activates `reasoning_effort`; with Anthropic models it can also activate
-`interleaved-thinking`.
-
 ## Layout
 
 Entry point: `src/server.py` (A2A server exposing `/.well-known/agent-card.json`).
@@ -101,18 +60,6 @@ amber/
 Dockerfile                     # linux/amd64 image for agentbeats.dev
 .env.example                   # Env var template
 ```
-
-## Evaluation
-
-Official results are produced by the AgentBeats Quick Submit pipeline and
-published on the
-[CAR-bench leaderboard](https://github.com/RDI-Foundation/car-bench-agentbeats-leaderboard).
-For local evaluation against the official Green Agent, use the upstream
-framework at
-[CAR-bench/car-bench-agentbeats](https://github.com/CAR-bench/car-bench-agentbeats)
-together with its `agentbeats-run` CLI — point the scenario's purple
-participant at a locally running instance of this agent (`uv run
-src/server.py --port 9009`).
 
 ## License
 
