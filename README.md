@@ -98,33 +98,21 @@ src/
   tool_call_types.py           # Pydantic models for A2A tool calls
 amber/
   amber-manifest-purple.json5  # Amber deployment manifest (agentbeats.dev)
-eval/
-  run_pass3_eval.py            # Local evaluation harness
-scenarios/
-  scenario.toml                # Local dev scenario
-  scenario-leaderboard.toml    # Official leaderboard submission template
 Dockerfile                     # linux/amd64 image for agentbeats.dev
 .env.example                   # Env var template
 ```
 
 ## Evaluation
 
-Local evaluation uses the official CAR-bench green agent from
-[CAR-bench/car-bench-agentbeats](https://github.com/CAR-bench/car-bench-agentbeats).
-
-```bash
-# 1. Clone the green agent repo next to this one
-git clone https://github.com/CAR-bench/car-bench-agentbeats ../car-bench-agentbeats
-
-# 2. Copy and fill the env template
-cp .env.example .env  # then edit .env
-
-# 3. Run smoke eval (~5 min, 6 subtypes × 1 trial)
-uv run python eval/run_pass3_eval.py --smoke-test --start-purple
-
-# 4. Run mini eval (12 tasks × 3 trials = 36 sessions, Pass^3)
-uv run python eval/run_pass3_eval.py --mini-test
-```
+Official results are produced by the AgentBeats Quick Submit pipeline and
+published on the
+[CAR-bench leaderboard](https://github.com/RDI-Foundation/car-bench-agentbeats-leaderboard).
+For local evaluation against the official Green Agent, use the upstream
+framework at
+[CAR-bench/car-bench-agentbeats](https://github.com/CAR-bench/car-bench-agentbeats)
+together with its `agentbeats-run` CLI — point the scenario's purple
+participant at a locally running instance of this agent (`uv run
+src/server.py --port 9009`).
 
 ## License
 
