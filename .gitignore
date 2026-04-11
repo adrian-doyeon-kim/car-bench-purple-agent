@@ -1,0 +1,35 @@
+# Secrets — NEVER commit
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Reference repos (cloned, not our code)
+car-bench-agentbeats/
+
+# Output / logs
+output/
+logs/
+*.log
+
+# Claude / tooling state
+.claude/
+.omc/

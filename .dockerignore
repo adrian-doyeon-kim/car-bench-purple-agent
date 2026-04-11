@@ -1,0 +1,35 @@
+# Secrets
+.env
+.env.*
+
+# Git
+.git/
+.gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+
+# OMC / Claude state
+.omc/
+.claude/
+
+# Reference repos (not needed in image)
+car-bench-agentbeats/
+agent-template/
+
+# Scenarios (not needed in purple agent image)
+scenarios/
+
+# Output / logs
+output/
+*.log
