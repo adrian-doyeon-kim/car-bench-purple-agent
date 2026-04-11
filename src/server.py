@@ -62,7 +62,7 @@ def main():
         description="Run the CAR-bench purple agent."
     )
     parser.add_argument("--host", type=str, default="0.0.0.0")
-    parser.add_argument("--port", type=int, default=8080)
+    parser.add_argument("--port", type=int, default=9009)
     parser.add_argument("--card-url", type=str, help="External URL for agent card")
     parser.add_argument("--agent-llm", type=str, default=None)
     parser.add_argument("--temperature", type=float, default=None)

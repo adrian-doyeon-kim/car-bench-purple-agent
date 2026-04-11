@@ -13,5 +13,5 @@ RUN \
     uv sync --no-editable --locked
 
 ENTRYPOINT ["uv", "run", "src/server.py"]
-CMD ["--host", "0.0.0.0", "--port", "8080"]
-EXPOSE 8080
+CMD ["--host", "0.0.0.0", "--port", "9009"]
+EXPOSE 9009

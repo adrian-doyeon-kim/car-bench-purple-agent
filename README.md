@@ -32,12 +32,12 @@ The agent is intentionally minimal:
 # Set your API key
 export OPENAI_API_KEY="sk-..."
 
-# Run locally
-uv run src/server.py --host 0.0.0.0 --port 8080
+# Run locally (default port 9009 matches the agentbeats.dev runner)
+uv run src/server.py --host 0.0.0.0 --port 9009
 
 # Or with Docker (linux/amd64 required for agentbeats.dev)
 docker build --platform linux/amd64 -t car-bench-purple-agent .
-docker run -p 8080:8080 -e OPENAI_API_KEY=$OPENAI_API_KEY car-bench-purple-agent
+docker run -p 9009:9009 -e OPENAI_API_KEY=$OPENAI_API_KEY car-bench-purple-agent
 ```
 
 ## Configuration

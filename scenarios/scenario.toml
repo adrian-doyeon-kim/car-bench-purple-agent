@@ -1,23 +1,29 @@
 # Local development scenario — run purple agent + green evaluator locally
 # Usage:
-#   1. cd car-bench-agentbeats && ./scenarios/car-bench/setup.sh  (download CAR-bench data)
-#   2. Start purple agent: uv run src/server.py --host 127.0.0.1 --port 8080
-#   3. Start evaluator: cd car-bench-agentbeats && uv run src/green_car_bench_agent/server.py --host 127.0.0.1 --port 8081
-#   4. Run: cd car-bench-agentbeats && uv run agentbeats-run scenarios/scenario.toml --show-logs
+#   1. git clone https://github.com/CAR-bench/car-bench-agentbeats ../car-bench-agentbeats
+#   2. cd ../car-bench-agentbeats && ./scenarios/car-bench/setup.sh   # download CAR-bench data
+#   3. Start purple agent:
+#        uv run src/server.py --host 127.0.0.1 --port 9009
+#   4. Start evaluator:
+#        cd ../car-bench-agentbeats && uv run src/green_car_bench_agent/server.py \
+#            --host 127.0.0.1 --port 9011
+#   5. Run:
+#        cd ../car-bench-agentbeats && uv run agentbeats-run scenarios/scenario.toml --show-logs
 
 [green_agent]
-endpoint = "http://127.0.0.1:8081"
-cmd = "python src/green_car_bench_agent/server.py --host 127.0.0.1 --port 8081"
+endpoint = "http://127.0.0.1:9011"
+cmd = "python src/green_car_bench_agent/server.py --host 127.0.0.1 --port 9011"
 
 [[participants]]
 role = "agent"
-endpoint = "http://127.0.0.1:8080"
-# Note: start the purple agent separately with: uv run src/server.py --host 127.0.0.1 --port 8080
+endpoint = "http://127.0.0.1:9009"
+# Note: start the purple agent separately with:
+#   uv run src/server.py --host 127.0.0.1 --port 9009
 
 [config]
 num_trials = 3
 task_split = "test"
-# Start small for testing, set to -1 for all tasks
+# Start small for local iteration; set to -1 for the full test split
 tasks_base_num_tasks = 2
 tasks_hallucination_num_tasks = 2
 tasks_disambiguation_num_tasks = 2
