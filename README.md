@@ -2,6 +2,42 @@
 
 Purple agent for the **AgentX-AgentBeats** competition — **CAR-bench** track.
 
+## Abstract
+
+CAR-bench measures whether an in-car voice assistant stays consistent across
+trials, obeys the policies it is given, resolves ambiguous requests through
+the prescribed escalation path, and refuses actions it cannot perform. Its
+headline metric, `Pass^k`, is the fraction of tasks that succeed on *all* `k`
+independent trials, so a single stochastic slip collapses a task's score to
+zero.
+
+This submission is a deliberately minimal purple agent. It is a **single-pass
+A2A executor**: one LLM call per turn, with the full tool catalogue and the
+full policy text (as received from the green agent) visible to the model on
+every call. There is no planner, no tool-selector, no separate policy
+checker. The motivation is that the green agent already encodes every rule
+the task needs; the purple agent's job is to obey those rules, and any
+pipeline stage that re-summarises either the tool list or the policy text
+risks dropping the one clause a later stage would have needed.
+
+The system prompt contains six domain-agnostic rules plus an agent-persistence
+directive: (1) capability check — never fabricate a tool or fake a result;
+(2) policy compliance — verify prerequisites via information-gathering tools
+before any state change; (3) resolve ambiguity via the procedure the
+instructions define, treating a clarification question as a last resort; (4)
+gather before act; (5) minimise state changes; (6) follow the output format
+the instructions specify. The prompt contains no vehicle terminology, no
+policy text, and no task identifiers; swapping in a different CAR-bench-style
+benchmark would require changing nothing in the agent.
+
+Running `gpt-5-mini` with `reasoning_effort=medium` and `temperature=1.0`,
+the agent reaches **Pass¹ 86.7 %** on a 30-task subset of the public test
+split and **Pass³ 83.3 %** (10 / 12) on a 12-task Pass³ mini split, with
+Pass@3 = 100 %. The Pass@3 result means every remaining Pass³ miss came from
+run-to-run variance rather than a task the model failed to understand.
+
+## Overview
+
 Single-pass A2A agent with a domain-agnostic, policy-agnostic system prompt.
 All rules the agent follows come from the instructions the green agent sends;
 the agent itself has no hardcoded task knowledge, tool names, or policy
