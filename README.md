@@ -36,12 +36,17 @@ The agent runs on `gpt-5-mini` with `reasoning_effort=medium` and
 
 ## Architecture
 
-```
-Green Agent (Evaluator)  ◄──A2A──►  Purple Agent
-  - Sends policies + tools           - Single LLM call per turn
-  - Sends user messages              - Reasoning model (e.g. gpt-5-mini)
-  - Executes tool calls              - 6 general agent rules only
-  - Scores results                   - No hardcoded policies or tools
+```mermaid
+sequenceDiagram
+    participant G as Green Agent
+    participant P as Purple Agent
+    loop Each turn
+        G->>P: TextPart (policy + user message)<br/>DataPart (tool catalogue)
+        Note over P: Single LLM call<br/>6 rules + reasoning
+        P->>G: TextPart (reply)<br/>DataPart (tool calls)
+        Note over G: Execute tools<br/>Update environment state
+    end
+    G->>G: Score outcome (Pass^k)
 ```
 
 ## Layout
