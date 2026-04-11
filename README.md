@@ -61,16 +61,19 @@ path activates `reasoning_effort`; with Anthropic models it can also activate
 
 ```
 src/
-  car_bench_agent.py   # Agent executor (single-pass, 6 rules)
-  server.py            # A2A server entry point
-  logging_utils.py     # Loguru + turn tracing
-  tool_call_types.py   # Pydantic models for A2A tool calls
+  car_bench_agent.py           # Agent executor (single-pass, 6 rules)
+  server.py                    # A2A server entry point
+  logging_utils.py             # Loguru + turn tracing
+  tool_call_types.py           # Pydantic models for A2A tool calls
+amber/
+  amber-manifest-purple.json5  # Amber deployment manifest (agentbeats.dev)
 eval/
-  run_pass3_eval.py    # Local evaluation harness
+  run_pass3_eval.py            # Local evaluation harness
 scenarios/
-  scenario.toml        # Local dev scenario (purple+green on localhost)
-Dockerfile             # linux/amd64 image for agentbeats.dev
-.env.example           # Env var template
+  scenario.toml                # Local dev scenario
+  scenario-leaderboard.toml    # Official leaderboard submission template
+Dockerfile                     # linux/amd64 image for agentbeats.dev
+.env.example                   # Env var template
 ```
 
 ## Evaluation

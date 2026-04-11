@@ -1,0 +1,45 @@
+{
+  manifest_version: "0.1.0",
+  program: {
+    image: "ghcr.io/adrian-doyeon-kim/car-bench-purple-agent:latest",
+    entrypoint: [
+      "uv",
+      "run",
+      "src/server.py",
+      "--host",
+      "0.0.0.0",
+      "--port",
+      "9009"
+    ],
+    env: {
+      AGENT_LLM: "${config.agent_llm}",
+      AGENT_THINKING: "${config.agent_thinking}",
+      AGENT_REASONING_EFFORT: "${config.agent_reasoning_effort}",
+      AGENT_TEMPERATURE: "${config.agent_temperature}",
+      OPENAI_API_KEY: "${config.openai_api_key}"
+    },
+    network: {
+      endpoints: [
+        { name: "endpoint", port: 9009 }
+      ]
+    }
+  },
+  config_schema: {
+    type: "object",
+    properties: {
+      agent_llm: { type: "string", default: "openai/gpt-5-mini" },
+      agent_thinking: { type: "string", default: "true" },
+      agent_reasoning_effort: { type: "string", default: "medium" },
+      agent_temperature: { type: "string", default: "1.0" },
+      openai_api_key: { type: "string", secret: true }
+    },
+    required: ["agent_llm", "openai_api_key"],
+    additionalProperties: false
+  },
+  provides: {
+    a2a: { kind: "a2a", endpoint: "endpoint" }
+  },
+  exports: {
+    a2a: "a2a"
+  }
+}
