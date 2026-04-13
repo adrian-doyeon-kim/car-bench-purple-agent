@@ -30,7 +30,7 @@ the instructions specify. The prompt contains no vehicle terminology, no
 policy text, and no task identifiers; swapping in a different CAR-bench-style
 benchmark would require changing nothing in the agent.
 
-The agent runs on `gpt-5-mini` with `reasoning_effort=medium` and
+The agent runs on `gpt-5-mini` with `reasoning_effort=high` and
 `temperature=1.0`. Evaluated results are published on the
 [CAR-bench leaderboard](https://github.com/RDI-Foundation/car-bench-agentbeats-leaderboard).
 
