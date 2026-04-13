@@ -86,7 +86,7 @@ def main():
         else os.getenv("AGENT_THINKING", "true").lower() == "true"
     )
     reasoning_effort = args.reasoning_effort or os.getenv(
-        "AGENT_REASONING_EFFORT", "high"
+        "AGENT_REASONING_EFFORT", "medium"
     )
     temperature = (
         args.temperature if args.temperature is not None
