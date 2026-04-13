@@ -29,7 +29,7 @@
     properties: {
       agent_llm: { type: "string", default: "openai/gpt-5-mini" },
       agent_thinking: { type: "string", default: "true" },
-      agent_reasoning_effort: { type: "string", default: "medium" },
+      agent_reasoning_effort: { type: "string", default: "high" },
       agent_temperature: { type: "string", default: "1.0" },
       openai_api_key: { type: "string", secret: true }
     },
